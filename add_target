@@ -1,0 +1,54 @@
+#!/bin/zsh
+
+# Automates the creation of a new target
+
+# USAGE:
+# % ./add_target [target-name] [language]
+# 
+# Example
+# % ./add_target Hello-World
+#
+# language: c, cpp, swift
+# 
+
+DESIRED_TARGET_NAME=$1
+EXT=$2
+
+if [ $EXT = "c" ]
+then
+    TARGET_PROTOTYPE="./__target_templates__/ConsoleProgramC/"
+elif [ $EXT = "cpp" ]
+then
+    TARGET_PROTOTYPE="./__target_templates__/ConsoleProgramCpp/"
+elif [ $EXT = "swift" ]
+then
+    TARGET_PROTOTYPE="./__target_templates__/ConsoleProgramSwift/"
+else
+    TARGET_PROTOTYPE=""
+fi
+
+if [ -z $1 ]
+then
+    echo "\nUSAGE:\n\t% ./add_target [target-name] [language-file-extension]\n"
+    echo "[language-file-extension]: c, cpp, swift"
+    exit
+fi
+
+## Create a new source directory
+## from $TARGET_PROTOTYPE
+cp -R $TARGET_PROTOTYPE $DESIRED_TARGET_NAME
+echo "[Created new directory $DESIRED_TARGET_NAME]"
+
+## Append the path of the newly created directory to CMakeLists.txt
+echo "add_subdirectory("./$DESIRED_TARGET_NAME")" >> "CMakeLists.txt"
+echo "[Added $DESIRED_TARGET_NAME to CMakeLists.txt]"
+
+## Modify the CMakeLists.txt file in ./$DESIRED_TARGET_NAME
+## so that the executable has the name $DESIRED_TARGET_NAME
+echo "add_executable("$DESIRED_TARGET_NAME main.$EXT source.$EXT")" > "./$DESIRED_TARGET_NAME/CMakeLists.txt"
+echo "[Added $DESIRED_TARGET_NAME to ./$DESIRED_TARGET_NAME/CMakeLists.txt]"
+
+## Run makebuilds so that CMake regenerates the build system with the new target
+./makebuilds
+echo "[Regenerated build system after $DESIRED_TARGET_NAME was added]"
+

@@ -1,0 +1,71 @@
+#!/bin/zsh
+
+#
+# USAGE:
+#   % ./run [test-suite] [build-mode]
+#   
+#   Example (builds and runs the 'graph' test suite, 'Debug' version):
+#       % ./run graph Debug
+#
+#       % ./run graph
+#           also works if the desired [build-mode] is Debug.
+#
+#   $0 is run
+#   $1 is [test-suite] (example, graph, tree, heap, hashtable, algorithm)
+#   $2 is [build-mode] (Debug, Release, RelWithDebInfo, MinSizeRel)
+#
+
+## The root directory of Make-based builds
+DIR_MAKE=./build/make
+
+## Pre-defined messages for the user
+CLEANING_BUILD="\n[Cleaning build...]"
+COMPLETE_MAKE="\n[Make finished.]\n"
+COMPLETE_PROCESS="\n[Process finished.]\n" 
+COMPLETE_CLEAN="[Clean finished.]"
+
+test_suite_argument=$1
+
+## Clear the screen
+clear;
+
+if [ -z $1 ]
+then
+    echo "\nUSAGE:\n\t% ./run [test-suite] [build-mode]\n\ntest suites: example, graph, tree, heap, hashtable, algorithm\nbuild modes: Debug, Release, RelWithDebInfo, MinSizeRel\n\nExample:\n\t% ./run graph Debug\n\n'Debug' is the default [build-mode] argument.\nIt can be omitted if preferred.\n\t% ./run graph\nis equivalent to the example shown above.\n"
+    exit
+fi
+
+## Test suite executable
+test_suite=$1
+
+## Build mode argument (third command line argument)
+mode=$2
+
+## If $2, the build mode argument, was empty -- default to Debug.
+if [ -z $2 ] 
+then
+    mode=Debug
+fi
+
+## Message strings dependent on command line arguments
+running_make="\n[Running make with mode: '"$mode"'...]\n"
+running_test_suite="[Running '"$test_suite"']\n"
+
+## Define make's working directory (argument for -C flag)
+make_working_directory=$DIR_MAKE/$mode/$test_suite
+
+## Clean the $mode build folder
+echo $CLEANING_BUILD;
+make clean -C $make_working_directory;
+echo $CLEAN_COMPLETE;
+
+## Run make for the specified test suite
+echo $running_make;
+make $test_suite -C $make_working_directory;
+echo $COMPLETE_MAKE;
+
+## Run built $test_suite
+echo $running_test_suite;
+$make_working_directory/$test_suite;
+echo $COMPLETE_PROCESS;
+
