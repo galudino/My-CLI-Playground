@@ -17,6 +17,8 @@ This repository uses `cmake`. The `CMakeLists.txt` file requires <b>3.17.3</b>.
 - A C/C++ compiler, `clang` or `gcc` for C and C++ compilation
 - A Swift compiler, `swiftc`, for Swift compilation
 
+[(return to top)](#table-of-contents)<br>
+
 ## How to use:
 
 There are some scripts provided in this repository:
@@ -35,6 +37,8 @@ There are some scripts provided in this repository:
     These configurations each have their own subdirectory in `./build/make`.
 
 - `./run` runs a target of your choice with a desired configuration.
+
+[(return to top)](#table-of-contents)<br>
 
 ## Creating and using a new target
 
@@ -61,11 +65,15 @@ You may specify one of the optional arguments after `./run MyNewTarget`:<br>
     - `Release`, i.e. `./run MyNewTarget Release`<br>
     - `MinSizeRel`, i.e. `./run MyNewTarget MinSizeRel`<br>
     - `RelWithDebInfo`<br>, i.e. `./run MyNewTarget RelWithDebInfo`<br>
+    
+[(return to top)](#table-of-contents)<br>
 
 ## Removing a target
 
 You could remove `MyNewTarget` yourself, and revise the `CMakeLists.txt` file --<br>
 or you can run `% ./remove_target MyNewTarget`.
+
+[(return to top)](#table-of-contents)<br>
 
 ## Script usage
 
@@ -87,3 +95,5 @@ or you can run `% ./remove_target MyNewTarget`.
 ### `./run`
 `./run [target-name] [configuration]`
 - Runs `make -C ./build/make/[configuration]/[target-name]`, then runs the executable for `target-name`.
+
+[(return to top)](#table-of-contents)<br>
