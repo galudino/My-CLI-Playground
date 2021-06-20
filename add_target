@@ -5,50 +5,79 @@
 # USAGE:
 # % ./add_target [target-name] [language]
 # 
-# Example
-# % ./add_target Hello-World
+# Example: creates target `Hello-World` with C source files
+# % ./add_target Hello-World c
 #
 # language: c, cpp, swift
-# 
+#
+
+if [ -z $2 ]
+then
+    echo "\nUSAGE:\n\t% ./add_target [target-name] [language-file-extension]\n"
+    echo "[language-file-extension]: c, cpp, m, mm, swift"
+    exit
+fi
 
 DESIRED_TARGET_NAME=$1
 EXT=$2
 
+TEMPLATE_DIR="./__target_templates__"
+
+TARGET_TEMPLATE_C="$TEMPLATE_DIR/ConsoleProgramC"
+TARGET_TEMPLATE_CPP="$TEMPLATE_DIR/ConsoleProgramCpp"
+TARGET_TEMPLATE_OBJC="$TEMPLATE_DIR/ConsoleProgramObjC"
+TARGET_TEMPLATE_OBJCPP="$TEMPLATE_DIR/ConsoleProgramObjCpp"
+TARGET_TEMPLATE_SWIFT="$TEMPLATE_DIR/ConsoleProgramSwift"
+
 if [ $EXT = "c" ]
 then
-    TARGET_PROTOTYPE="./__target_templates__/ConsoleProgramC/"
+    TARGET_PROTOTYPE=$TARGET_TEMPLATE_C
 elif [ $EXT = "cpp" ]
 then
-    TARGET_PROTOTYPE="./__target_templates__/ConsoleProgramCpp/"
+    TARGET_PROTOTYPE=$TARGET_TEMPLATE_CPP
+elif [ $EXT = "m" ]
+then
+    TARGET_PROTOTYPE=$TARGET_TEMPLATE_OBJC
+elif [ $EXT = "mm" ]
+then
+    TARGET_PROTOTYPE=$TARGET_TEMPLATE_OBJCPP
 elif [ $EXT = "swift" ]
 then
-    TARGET_PROTOTYPE="./__target_templates__/ConsoleProgramSwift/"
+    TARGET_PROTOTYPE=$TARGET_TEMPLATE_SWIFT
 else
-    TARGET_PROTOTYPE=""
-fi
-
-if [ -z $1 ]
-then
-    echo "\nUSAGE:\n\t% ./add_target [target-name] [language-file-extension]\n"
-    echo "[language-file-extension]: c, cpp, swift"
+    echo "[Error, argument $EXT is not supported.]"
     exit
 fi
 
 ## Create a new source directory
 ## from $TARGET_PROTOTYPE
-cp -R $TARGET_PROTOTYPE $DESIRED_TARGET_NAME
-echo "[Created new directory $DESIRED_TARGET_NAME]"
+cp -R $TARGET_PROTOTYPE ./src/$DESIRED_TARGET_NAME
+echo "[Created new directory ./src/$DESIRED_TARGET_NAME]"
 
 ## Append the path of the newly created directory to CMakeLists.txt
-echo "add_subdirectory("./$DESIRED_TARGET_NAME")" >> "CMakeLists.txt"
-echo "[Added $DESIRED_TARGET_NAME to CMakeLists.txt]"
+echo "add_subdirectory("./$DESIRED_TARGET_NAME")" >> "src/CMakeLists.txt"
+echo "[Added $DESIRED_TARGET_NAME to src/CMakeLists.txt]"
 
 ## Modify the CMakeLists.txt file in ./$DESIRED_TARGET_NAME
 ## so that the executable has the name $DESIRED_TARGET_NAME
-echo "add_executable("$DESIRED_TARGET_NAME main.$EXT source.$EXT")" > "./$DESIRED_TARGET_NAME/CMakeLists.txt"
-echo "[Added $DESIRED_TARGET_NAME to ./$DESIRED_TARGET_NAME/CMakeLists.txt]"
+if [ $EXT = "c" ]
+then
+    echo "add_executable("$DESIRED_TARGET_NAME main.c header.h source.c")" > "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
+elif [ $EXT = "cpp" ]
+then
+    echo "add_executable("$DESIRED_TARGET_NAME main.cpp header.hpp source.cpp")" > "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
+elif [ $EXT = "m" ]
+then
+    echo "add_executable("$DESIRED_TARGET_NAME main.m header.h source.m")" > "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
+elif [ $EXT = "mm" ]
+then
+    echo "add_executable("$DESIRED_TARGET_NAME main.mm header.h source.mm header.hpp source.cpp")" > "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
+else
+    echo "add_executable("$DESIRED_TARGET_NAME main.$EXT source.$EXT")" > "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
+fi
+
+echo "[Added $DESIRED_TARGET_NAME to ./src/$DESIRED_TARGET_NAME/CMakeLists.txt]"
 
 ## Run makebuilds so that CMake regenerates the build system with the new target
 ./makebuilds
 echo "[Regenerated build system after $DESIRED_TARGET_NAME was added]"
-

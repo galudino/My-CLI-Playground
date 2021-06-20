@@ -1,2 +1,2 @@
-add_executable("ConsoleProgramC" "main.c" "source.c")
+add_executable("ConsoleProgramC" "main.c" "header.h" "source.c")
 

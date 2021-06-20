@@ -4,14 +4,14 @@
 # USAGE:
 #   % ./run [test-suite] [build-mode]
 #   
-#   Example (builds and runs the 'graph' test suite, 'Debug' version):
-#       % ./run graph Debug
+#   Example (builds and runs the 'stackqueue' target, 'Debug' version):
+#       % ./run stackqueue Debug
 #
-#       % ./run graph
+#       % ./run stackqueue
 #           also works if the desired [build-mode] is Debug.
 #
 #   $0 is run
-#   $1 is [test-suite] (example, graph, tree, heap, hashtable, algorithm)
+#   $1 is [target]
 #   $2 is [build-mode] (Debug, Release, RelWithDebInfo, MinSizeRel)
 #
 

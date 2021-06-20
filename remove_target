@@ -12,16 +12,15 @@ TARGET_NAME=$1
 CMAKE_SUBDIRECTORY="add_subdirectory(.\/$TARGET_NAME)"
 
 ## Remove directory $TARGET_NAME
-rm -rf ./$TARGET_NAME
-echo "[Removed directory $TARGET_NAME]"
+rm -rf ./src/$TARGET_NAME
+echo "[Removed directory src/$TARGET_NAME]"
 
-## Remove "add_subdirectory(./$TARGET_NAME) from CMakeLists.txt
+## Remove "add_subdirectory(./src/$TARGET_NAME) from CMakeLists.txt
 ## Changes CMakeLists.txt and creates a CMakeLists.txt.backup
 ## of the file prior to changes
-sed -e s/$CMAKE_SUBDIRECTORY//g -i .backup CMakeLists.txt
-echo "[Removed $TARGET_NAME from CMakeLists.txt]"
+sed -e s/$CMAKE_SUBDIRECTORY//g -i .backup ./src/CMakeLists.txt
+echo "[Removed $TARGET_NAME from ./src/CMakeLists.txt]"
 
 ## Re-run makebuilds for build system regeneration without $TARGET_NAME
 ./makebuilds
 echo "[Regenerated build system after $TARGET_NAME was removed]"
-

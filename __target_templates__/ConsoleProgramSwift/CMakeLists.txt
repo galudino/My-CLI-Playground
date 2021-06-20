@@ -1,2 +1,2 @@
-add_executable("main.swift" "source.swift")
+add_executable("ConsoleProgramSwift" "main.swift" "source.swift")
 

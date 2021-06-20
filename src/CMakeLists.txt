@@ -1,5 +1,5 @@
 set(PROJECT_TITLE "My-CLI-Playground")
-set(CMAKE_VERSION "3.17.3")
+set(CMAKE_VERSION "3.18")
 
 set(CXX_STD "11") # C11
 set(CFLAGS "-Wall -Werror -pedantic-errors")
@@ -15,7 +15,3 @@ project("${PROJECT_TITLE}")
 include_directories("${DIR_INCLUDE}")
 
 add_subdirectory("./stackqueue-c")
-
-
-
-
