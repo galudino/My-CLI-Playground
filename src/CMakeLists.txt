@@ -1,7 +1,7 @@
 set(PROJECT_TITLE "My-CLI-Playground")
 set(CMAKE_VERSION "3.18")
 
-set(CXX_STD "11") # C11
+set(CXX_STD "20") # C11
 set(CFLAGS "-Wall -Werror -pedantic-errors")
 
 set(DIR_INCLUDE "./")
