@@ -1,12 +1,13 @@
 /*!
-    \file       test.c
+    \file       main.c
     \brief      Client source file
 
     \author     Gemuele Aludino
     \date
  */
 
-#include "header.h"
+#include "linkedstack.h"
+#include "linkedqueue.h"
 
 #include <stdio.h>
 
