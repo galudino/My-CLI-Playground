@@ -15,3 +15,4 @@ project("${PROJECT_TITLE}")
 include_directories("${DIR_INCLUDE}")
 
 add_subdirectory("./stackqueue-c")
+add_subdirectory(./spiralmatrix-cpp)
