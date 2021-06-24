@@ -16,3 +16,6 @@ include_directories("${DIR_INCLUDE}")
 
 add_subdirectory("./stackqueue-c")
 add_subdirectory(./spiralmatrix-cpp)
+
+
+add_subdirectory(./blocks-c)
