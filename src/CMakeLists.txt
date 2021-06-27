@@ -14,8 +14,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CFLAGS}")
 project("${PROJECT_TITLE}")
 include_directories("${DIR_INCLUDE}")
 
-add_subdirectory("./stackqueue-c")
+add_subdirectory(./stackqueue-c)
 add_subdirectory(./spiralmatrix-cpp)
-
-
+add_subdirectory(./testbench-c)
 add_subdirectory(./blocks-c)
+add_subdirectory(./testbench-cpp)
+add_subdirectory(./testbench-objcpp)
