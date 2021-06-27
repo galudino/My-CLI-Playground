@@ -6,12 +6,12 @@
     \date
  */
 
- #import "header.h"
+#import "header.h"
 
- int main(int argc, const char *argv[]) {
+int main(int argc, const char *argv[]) {
     @autoreleasepool {
         NSLog(@"Hello, world!");
     }
 
     return 0;
- }
+}
