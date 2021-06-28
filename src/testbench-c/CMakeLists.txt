@@ -1,6 +1,6 @@
 add_library(testbench-c-library source.c header.h)
-add_compile_options(testbench-c-library PUBLIC -fblocks)
+target_compile_options(testbench-c-library PUBLIC -fblocks)
 target_include_directories(testbench-c-library PUBLIC )
 add_executable(testbench-c main.c)
-add_compile_options(testbench-c PUBLIC -fblocks)
+target_compile_options(testbench-c PUBLIC -fblocks)
 target_link_libraries(testbench-c LINK_PUBLIC testbench-c-library)

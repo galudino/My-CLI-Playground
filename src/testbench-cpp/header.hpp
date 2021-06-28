@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <functional>
 #include <exception>
 
 #endif /* HEADER_HPP */

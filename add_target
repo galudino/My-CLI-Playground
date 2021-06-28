@@ -66,37 +66,37 @@ echo "[Added $DESIRED_TARGET_NAME to src/CMakeLists.txt]"
 if [ $EXT = "c" ]
 then
     echo "add_library($DESIRED_TARGET_NAME-library source.c header.h)" > $CMAKE_DEST
-    echo "add_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
+    echo "target_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
     echo "target_include_directories($DESIRED_TARGET_NAME-library PUBLIC ${CMAKE_CURRENT_SOURCE_DIRECTORY})" >> $CMAKE_DEST
     echo "add_executable($DESIRED_TARGET_NAME main.c)" >> $CMAKE_DEST
-    echo "add_compile_options($DESIRED_TARGET_NAME PUBLIC -fblocks)" >> $CMAKE_DEST
+    echo "target_compile_options($DESIRED_TARGET_NAME PUBLIC -fblocks)" >> $CMAKE_DEST
     echo "target_link_libraries($DESIRED_TARGET_NAME LINK_PUBLIC $DESIRED_TARGET_NAME-library)" >> $CMAKE_DEST
 elif [ $EXT = "cpp" ]
 then
     echo "add_library($DESIRED_TARGET_NAME-library source.cpp header.hpp)" >  "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
-    echo "add_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
+    echo "target_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
     echo "target_include_directories($DESIRED_TARGET_NAME-library PUBLIC ${CMAKE_CURRENT_SOURCE_DIRECTORY})" >> "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
     echo "add_executable($DESIRED_TARGET_NAME main.cpp)" >> "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
-    echo "add_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
+    echo "target_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
     echo "target_link_libraries($DESIRED_TARGET_NAME LINK_PUBLIC $DESIRED_TARGET_NAME-library)" >> "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
 elif [ $EXT = "m" ]
 then
     echo "add_library($DESIRED_TARGET_NAME-library source.m header.h)" >  "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
-    echo "add_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
+    echo "target_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
     echo "target_include_directories($DESIRED_TARGET_NAME-library PUBLIC ${CMAKE_CURRENT_SOURCE_DIRECTORY})" >> "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
     echo "add_executable($DESIRED_TARGET_NAME main.m)" >> "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
-    echo "add_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
+    echo "target_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
     echo "target_link_libraries($DESIRED_TARGET_NAME LINK_PUBLIC $DESIRED_TARGET_NAME-library -framework Foundation -framework Cocoa -framework AppKit -framework CoreData)" >> "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
 elif [ $EXT = "mm" ]
 then
     echo "add_library($DESIRED_TARGET_NAME-librarycpp source.cpp header.hpp)" >  "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
-    echo "add_compile_options($DESIRED_TARGET_NAME-librarycpp PUBLIC -fblocks)" >> $CMAKE_DEST
+    echo "target_compile_options($DESIRED_TARGET_NAME-librarycpp PUBLIC -fblocks)" >> $CMAKE_DEST
     echo "target_include_directories($DESIRED_TARGET_NAME-librarycpp PUBLIC ${CMAKE_CURRENT_SOURCE_DIRECTORY})" >> "./src/$DESIRED_TARGET_NAME/CMakeLists.txt" 
     echo "add_library($DESIRED_TARGET_NAME-library source.mm header.h)" >  "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
-    echo "add_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
+    echo "target_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
     echo "target_include_directories($DESIRED_TARGET_NAME-library PUBLIC ${CMAKE_CURRENT_SOURCE_DIRECTORY})" >> "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
     echo "add_executable($DESIRED_TARGET_NAME main.mm)" >> "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
-    echo "add_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
+    echo "target_compile_options($DESIRED_TARGET_NAME-library PUBLIC -fblocks)" >> $CMAKE_DEST
     echo "target_link_libraries($DESIRED_TARGET_NAME LINK_PUBLIC $DESIRED_TARGET_NAME-library -framework Foundation -framework Cocoa -framework AppKit -framework CoreData)" >> "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
 else
     echo "add_executable("$DESIRED_TARGET_NAME main.$EXT source.$EXT")" > "./src/$DESIRED_TARGET_NAME/CMakeLists.txt"
