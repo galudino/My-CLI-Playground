@@ -1,0 +1,6 @@
+add_library(graph-cpp-library source.cpp header.hpp)
+target_compile_options(graph-cpp-library PUBLIC -fblocks)
+target_include_directories(graph-cpp-library PUBLIC )
+add_executable(graph-cpp main.cpp)
+target_compile_options(graph-cpp-library PUBLIC -fblocks)
+target_link_libraries(graph-cpp LINK_PUBLIC graph-cpp-library)
