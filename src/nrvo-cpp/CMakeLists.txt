@@ -1,0 +1,6 @@
+add_library(nrvo-cpp-library source.cpp header.hpp)
+target_compile_options(nrvo-cpp-library PUBLIC -fblocks)
+target_include_directories(nrvo-cpp-library PUBLIC )
+add_executable(nrvo-cpp main.cpp)
+target_compile_options(nrvo-cpp-library PUBLIC -fblocks)
+target_link_libraries(nrvo-cpp LINK_PUBLIC nrvo-cpp-library)
