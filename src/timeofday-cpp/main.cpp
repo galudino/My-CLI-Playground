@@ -16,8 +16,16 @@
 
     \return     0 on success, non-zero on failure
  */
-int main(int argc, const char *argv[]) {
-    std::cout << "Hello, world!" << std::endl;
+
+auto main(int argc, const char *argv[]) -> int {
+    /*
+    auto ts = timestamp(00, 00, 10);
+    auto end = timestamp(00, 00, 00);
+
+    do {
+        std::cout << ts-- << std::endl;
+    } while (ts != end);
+    */
 
     return EXIT_SUCCESS;
 }
