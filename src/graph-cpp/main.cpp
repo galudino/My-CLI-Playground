@@ -7,23 +7,7 @@
  */
 
 #include "header.hpp"
-
-namespace ds {
-
-template <typename T>
-class graph;
-
-}
-
-template <typename T, size_t RowColCount = 16>
-class ds::graph {
-public:
-    using adjmtx_row = std::array<bool, RowColCount>;
-    using value_type = T;
-private:
-    std::array<adjmtx_row, max_count> m_adjacency_matrix;
-    std::array<value_type, max_count> m_node_data;
-};
+#include "graph.hpp"
 
 /*!
     \brief      Program execution begins here.
