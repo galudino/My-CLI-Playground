@@ -64,3 +64,4 @@ temp/*
 .backup
 
 CMakeLists.txt.backup
+*.swp

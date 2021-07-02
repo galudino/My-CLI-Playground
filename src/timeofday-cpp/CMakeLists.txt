@@ -1,0 +1,6 @@
+add_library(timeofday-cpp-library source.cpp header.hpp)
+target_compile_options(timeofday-cpp-library PUBLIC -fblocks)
+target_include_directories(timeofday-cpp-library PUBLIC )
+add_executable(timeofday-cpp main.cpp)
+target_compile_options(timeofday-cpp-library PUBLIC -fblocks)
+target_link_libraries(timeofday-cpp LINK_PUBLIC timeofday-cpp-library)
