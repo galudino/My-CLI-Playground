@@ -1,0 +1,6 @@
+add_library(threads-cpp-library source.cpp header.hpp)
+target_compile_options(threads-cpp-library PUBLIC -fblocks)
+target_include_directories(threads-cpp-library PUBLIC )
+add_executable(threads-cpp main.cpp)
+target_compile_options(threads-cpp-library PUBLIC -fblocks)
+target_link_libraries(threads-cpp LINK_PUBLIC threads-cpp-library)
