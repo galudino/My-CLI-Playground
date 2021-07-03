@@ -1,0 +1,5 @@
+add_library(timestamp-cpp-library timestamp.cpp timestamp.hpp)
+target_compile_options(timestamp-cpp-library PUBLIC -fblocks)
+target_include_directories(timestamp-cpp-library PUBLIC "./")
+add_executable(timestamp-cpp main.cpp)
+target_link_libraries(timestamp-cpp LINK_PUBLIC timestamp-cpp-library)
