@@ -47,6 +47,9 @@ bool random_bool() {
     return (std::rand() % (true + 1) - false) + false;
 }
 
+void timestamp_demo();
+void random_demo();
+
 /*!
     \brief      Program execution begins here.
     
@@ -56,6 +59,10 @@ bool random_bool() {
     \return     0 on success, non-zero on failure
  */
 int main(int argc, const char *argv[]) {
+    random_demo();
+}
+
+void timestamp_demo() {
     // Start at 00:00:05
     auto time = timestamp(0, 0, 5);
     
@@ -92,18 +99,36 @@ int main(int argc, const char *argv[]) {
     stop_timer = high_resolution_clock::now();
     const auto duration_up = duration_cast<std::chrono::milliseconds>(stop_timer - start_timer);
     std::cout << "Timer ran for: " << duration_up.count() << "ms" << std::endl;
+}
 
+void random_demo() {
     constexpr auto min = 10000;
     constexpr auto max = 60000;
     
     using std::chrono_literals::operator""ms;
+    using std::string_literals::operator""s;
+    
+    auto label = "random number generation: [10000, 60000): "s;
+    std::cout << label;
+    
+    auto move_back_chars = std::string(5, '\b');
+    move_back_chars += std::string(5, ' ');
+    move_back_chars += std::string(5, '\b');
     
     for (auto i = 0; i < 100; i++) {
         std::cout << random_closed_range(min, max);
         std::cout.flush();
-        std::cout << "\b\b\b\b\b     \b\b\b\b\b";
+        std::cout << move_back_chars;
         std::this_thread::sleep_for(50ms);
     }
     
-    return EXIT_SUCCESS;
+    move_back_chars.clear();
+    
+    move_back_chars = std::string(label.size(), '\b');
+    move_back_chars += std::string(label.size(), ' ');
+    move_back_chars += std::string(label.size(), '\b');
+    
+    std::cout << move_back_chars;
+    
+    std::cout << "[done]" << std::endl;
 }
