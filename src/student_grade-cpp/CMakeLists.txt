@@ -1,0 +1,6 @@
+add_library(student_grade-cpp-library source.cpp header.hpp)
+target_compile_options(student_grade-cpp-library PUBLIC -fblocks)
+target_include_directories(student_grade-cpp-library PUBLIC )
+add_executable(student_grade-cpp main.cpp)
+target_compile_options(student_grade-cpp-library PUBLIC -fblocks)
+target_link_libraries(student_grade-cpp LINK_PUBLIC student_grade-cpp-library)
