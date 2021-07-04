@@ -17,36 +17,64 @@
 #include <functional>
 #include <exception>
 
-struct addable {
-    virtual addable &operator+=(const addable &rhs) = 0;
-    virtual addable &operator-=(const addable &rhs) = 0;
-
-    virtual ~addable() {}
-};
-
-class Int : public addable {
+class graph {
 public:
-    Int(int value = 0) : m_impl(value) {}
+    using adjacency_list = std::forward_list<int>;
     
-    addable &operator+=(const addable &rhs);
-    addable &operator-=(const addable &rhs);
+    graph(std::initializer_list<std::initializer_list<int>> list);
     
-    void func() {}
+    graph() = default;
+    graph(const graph &g) = default;
+    graph(graph &&g) = default;
     
-    friend std::ostream &operator<<(std::ostream &os, const Int &i);
+    virtual ~graph() {}
+    
+    graph &operator=(const graph &g) = default;
+    graph &operator=(graph &&g) = default;
+    
+    int add_vertex();
+    bool remove_vertex(int vertex_id);
+    
+    bool add_edge(int origin_vertex_id, int destination_vertex_id);
+    bool remove_edge(int origin_vertex_id, int destination_vertex_id);
+
+    const adjacency_list &operator[](int vertex_id) const;
+    
+    size_t size() const;
+    bool empty() const;
+    void print() const;
+    
+    void depth_first_traversal();
+    bool depth_first_traversal(int vertex_id);
+    void breadth_first_traversal();
+    
+    void clear();
+    
+    friend std::ostream &operator<<(std::ostream &os, const graph &g);
+protected:
+    std::vector<adjacency_list> m_graph;
 private:
-    constexpr Int &Int_cast(const addable &rhs) {
-        const Int *result = nullptr;
-        if (!(result = dynamic_cast<const Int *>(&rhs))) {
-            throw std::bad_cast();
-        }
-        
-        return *const_cast<Int *>(result);
-    }
-    
-    int m_impl;
+    void m_dft(int v, std::vector<bool> &visited);
 };
 
+class weighted_graph : public graph {
+public:
+    weighted_graph() = default;
+    
+    weighted_graph(const weighted_graph &wg) = default;
+    weighted_graph(weighted_graph &&wg) = default;
+    
+    weighted_graph &operator=(const weighted_graph &wg) = default;
+    weighted_graph &operator=(weighted_graph &&wg) = default;
+    
+    void create_weighted_graph();
+    
+    void shortest_path(int vertex_id);
+    void print_shortest_distance(int vertex_id);
+protected:
+    std::vector<std::vector<double>> m_weights;
+    std::vector<double> m_smallest_weight;
+};
 
 #endif /* HEADER_HPP */
 
