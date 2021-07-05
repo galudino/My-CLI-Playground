@@ -1,3 +1,11 @@
+/*!
+    \file       header.cpp
+    \brief      Header file
+
+    \author
+    \date
+ */
+
 #ifndef HEADER_HPP
 #define HEADER_HPP
 
