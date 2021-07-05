@@ -1,0 +1,5 @@
+add_library(weightedGraphType-cpp-library weightedGraphType.cpp weightedGraphType.hpp)
+target_include_directories(weightedGraphType-cpp-library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(weightedGraphType-cpp-library LINK_PUBLIC graphType-cpp-library)
+add_executable(weightedGraphType-cpp main.cpp)
+target_link_libraries(weightedGraphType-cpp LINK_PUBLIC weightedGraphType-cpp-library)
