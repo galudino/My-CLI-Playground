@@ -1,0 +1,5 @@
+add_library(msTreeType-cpp-library msTreeType.cpp msTreeType.hpp)
+target_include_directories(msTreeType-cpp-library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(msTreeType-cpp-library LINK_PUBLIC graphType-cpp-library)
+add_executable(msTreeType-cpp main.cpp)
+target_link_libraries(msTreeType-cpp LINK_PUBLIC msTreeType-cpp-library)
