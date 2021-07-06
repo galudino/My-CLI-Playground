@@ -1,0 +1,6 @@
+add_library(htable-test-library source.cpp header.hpp)
+target_compile_options(htable-test-library PUBLIC -fblocks)
+target_include_directories(htable-test-library PUBLIC )
+add_executable(htable-test main.cpp)
+target_compile_options(htable-test-library PUBLIC -fblocks)
+target_link_libraries(htable-test LINK_PUBLIC htable-test-library)
