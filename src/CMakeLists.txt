@@ -3,7 +3,7 @@ set(CMAKE_VERSION "3.18")
 
 set(C_STANDARD "11") # C11
 set(CXX_STANDARD "20") # C++20
-#set(CFLAGS "-Wall -Werror -pedantic-errors")
+set(CFLAGS "-Wall -Werror -pedantic-errors")
 
 set(DIR_INCLUDE "./")
 
@@ -36,3 +36,4 @@ add_subdirectory(./testbench-cpp)
 add_subdirectory(./htable-test)
 add_subdirectory(./opengl-test-cpp)
 add_subdirectory(./sfml-test-cpp)
+add_subdirectory(./inheritance-cpp)
