@@ -1,0 +1,6 @@
+add_library(threads-c-library source.c header.h)
+target_compile_options(threads-c-library PUBLIC -fblocks)
+target_include_directories(threads-c-library PUBLIC )
+add_executable(threads-c main.c)
+target_compile_options(threads-c PUBLIC -fblocks)
+target_link_libraries(threads-c LINK_PUBLIC threads-c-library)

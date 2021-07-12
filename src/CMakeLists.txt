@@ -40,3 +40,4 @@ add_subdirectory(./inheritance-cpp)
 add_subdirectory(./multiple-inheritance-cpp)
 
 add_subdirectory(./fork-dirent-c)
+add_subdirectory(./threads-c)
