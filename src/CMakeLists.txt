@@ -38,3 +38,5 @@ add_subdirectory(./opengl-test-cpp)
 add_subdirectory(./sfml-test-cpp)
 add_subdirectory(./inheritance-cpp)
 add_subdirectory(./multiple-inheritance-cpp)
+
+add_subdirectory(./fork-dirent-c)

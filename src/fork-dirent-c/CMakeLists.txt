@@ -1,0 +1,6 @@
+add_library(fork-dirent-c-library source.c header.h)
+target_compile_options(fork-dirent-c-library PUBLIC -fblocks)
+target_include_directories(fork-dirent-c-library PUBLIC )
+add_executable(fork-dirent-c main.c)
+target_compile_options(fork-dirent-c PUBLIC -fblocks)
+target_link_libraries(fork-dirent-c LINK_PUBLIC fork-dirent-c-library)
