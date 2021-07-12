@@ -8,10 +8,11 @@
 
 #include "header.hpp"
 #include <thread>
+#include <vector>
+#include <array>
 
-void function_1() {
-    std::cout << "Beauty is only skin deep" << std::endl;
-}
+int shared_data = 0;
+std::mutex shared_data_mutex;
 
 /*!
     \brief      Program execution begins here.
@@ -22,19 +23,30 @@ void function_1() {
     \return     0 on success, non-zero on failure
  */
 int main(int argc, const char *argv[]) {
-    std::thread t1(function_1);     // t1 starts running
+    // We know we want 16 total threads,
+    // so an array is adequate.
+    auto v = std::array<std::thread, 16>();
     
-    // can only join or detach a thread only once.
-    // t1.join();                   // main thread waits for t1 to return
-    //t1.detach();                    // t1 will run freely on its own - daemon process
-    
-    if (t1.joinable()) {
-        t1.join();
-        std::cout << "Joined thread t1\n";
-    } else {
-        std::cout << "Cannot join\n";
+    // Spawn all 16 threads.
+    // Each thread will add (i + 1) to shared_data.
+    for (auto i = 0; i < 16; i++) {
+        v[i] = std::thread([i](void) -> void {
+            // mutex ensures that only one thread
+            // can write to shared_data at a time.
+            shared_data_mutex.lock();
+            shared_data += (i + 1);
+            shared_data_mutex.unlock();
+        });
     }
     
+    // Join all threads
+    for (auto &t : v) {
+        t.join();
+    }
+    
+    // shared_data should be 136
+    std::cout << "Final sum: " << shared_data << std::endl;
+
     return EXIT_SUCCESS;
 }
 
