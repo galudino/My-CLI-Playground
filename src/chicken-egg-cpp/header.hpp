@@ -5,7 +5,6 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
-#include <exception>
 
 class egg;
 class bird;
@@ -15,50 +14,48 @@ class penguin;
 class bird {
 public:
     virtual ~bird() {}
-    virtual std::unique_ptr<egg> lay_egg() = 0;
+    virtual auto lay_egg() -> std::unique_ptr<egg> = 0;
 };
 
 class egg {
 public:
     using birdmaker = std::function<std::unique_ptr<bird>()>;
 
-    egg(birdmaker bm) : m_make_bird(bm){}
-
-    std::unique_ptr<bird> hatch() {
-        if (m_hatched) {
-            throw std::logic_error("Egg already hatched");
-        }
-        
-        std::cout << "Hatching a ";
-
-        m_hatched = true;
-        return m_make_bird();
-    }
+    egg(birdmaker bm) : m_make_bird{bm} { }
+    auto hatch() -> std::unique_ptr<bird>;
 private:
     birdmaker m_make_bird; 
-    bool m_hatched = false;
+    bool m_hatched{};
 };
 
 class chicken : public bird {
 public:
-    std::unique_ptr<egg> lay_egg() override {
-        std::cout << "Laying an egg for a chicken" << std::endl;
-        return std::make_unique<egg>([]{ 
-            std::cout << "chicken" << std::endl; 
-            return std::make_unique<chicken>(); 
-        });
+    auto lay_egg() -> std::unique_ptr<egg> override {
+        std::cout << "Laying an egg for a chicken." << std::endl;
+        return std::make_unique<egg>(s_make_chicken);
     }
+
+    static auto mother_chicken() -> std::shared_ptr<chicken> {
+        return s_mother_chicken;
+    }
+private:
+    static const egg::birdmaker s_make_chicken;
+    static std::shared_ptr<chicken> s_mother_chicken;
 };
 
 class penguin : public bird {
 public:
-    std::unique_ptr<egg> lay_egg() override {
-        std::cout << "Laying an egg for a penguin" << std::endl;
-        return std::make_unique<egg>([]{
-            std::cout << "penguin" << std::endl;
-            return std::make_unique<penguin>();
-        });
+    auto lay_egg() -> std::unique_ptr<egg> override {
+        std::cout << "Laying an egg for a penguin." << std::endl;
+        return std::make_unique<egg>(s_make_penguin);
     }
+
+    static auto mother_penguin() -> std::shared_ptr<penguin> {
+        return s_mother_penguin;
+    }
+private:
+    static const egg::birdmaker s_make_penguin;
+    static std::shared_ptr<penguin> s_mother_penguin;
 };
 
 #endif /* HEADER_HPP */
