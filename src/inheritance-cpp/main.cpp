@@ -1,4 +1,4 @@
-/*!
+ /*!
     \file       main.cpp
     \brief      Client source file
 
@@ -17,7 +17,16 @@
     \return     0 on success, non-zero on failure
  */
 int main(int argc, const char *argv[]) {
-    std::cout << "Hello, world!" << std::endl;
+    auto b = readwritebuffer{16};
+
+    for (auto i = 0; i < b.size(); i++) {
+        b[i] = '-';
+    }
+    
+    b.set_at(0, 'h');
+    
+    std::cout << b << std::endl;
+    
     return EXIT_SUCCESS;
 }
 
