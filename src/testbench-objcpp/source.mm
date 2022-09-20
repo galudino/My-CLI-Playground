@@ -36,18 +36,6 @@
     return self;
 }
 
-- (NSUInteger)area {
-    return 0;
-}
-
-- (NSUInteger)perimeter {
-    return 0;
-}
-
-- (NSUInteger)distanceFrom:(id)other {
-    return 0;
-}
-
 - (CGFloat)x {
     return self->_pos.x;
 }
@@ -62,6 +50,18 @@
 
 - (void)setY:(CGFloat)y {
     self->_pos.y = y;
+}
+
+- (NSUInteger)area {
+    return 0;
+}
+
+- (NSUInteger)perimeter {
+    return 0;
+}
+
+- (NSUInteger)distanceFrom:(id)other {
+    return 0;
 }
 
 @end
