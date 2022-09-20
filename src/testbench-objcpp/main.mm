@@ -13,5 +13,11 @@ int main(int argc, const char *argv[]) {
         NSLog(@"Hello, world!");
     }
 
+    Shape2D *shape = [[Shape2D alloc] initWithPoint:CGPoint{3, 4}];;
+
+    NSLog(@"%@", shape);
+
+    [shape release];
+
     return 0;
 }
