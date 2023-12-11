@@ -1,0 +1,6 @@
+add_library(csv-cpp-library source.cpp header.hpp)
+target_compile_options(csv-cpp-library PUBLIC -fblocks)
+target_include_directories(csv-cpp-library PUBLIC )
+add_executable(csv-cpp main.cpp)
+target_compile_options(csv-cpp-library PUBLIC -fblocks)
+target_link_libraries(csv-cpp LINK_PUBLIC csv-cpp-library)
