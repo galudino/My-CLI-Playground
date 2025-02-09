@@ -45,3 +45,4 @@ add_subdirectory(./threads-c)
 add_subdirectory(./csv-cpp)
 
 add_subdirectory(./singly-linked-list-c)
+add_subdirectory(./doubly-linked-list-c)

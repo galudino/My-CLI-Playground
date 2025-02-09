@@ -1,0 +1,6 @@
+add_library(doubly-linked-list-c-library source.c header.h)
+target_compile_options(doubly-linked-list-c-library PUBLIC -fblocks)
+target_include_directories(doubly-linked-list-c-library PUBLIC )
+add_executable(doubly-linked-list-c main.c)
+target_compile_options(doubly-linked-list-c PUBLIC -fblocks)
+target_link_libraries(doubly-linked-list-c LINK_PUBLIC doubly-linked-list-c-library)

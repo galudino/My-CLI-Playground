@@ -36,41 +36,43 @@ static forward_list_node *
 forward_list_node_mergesort(forward_list_node *head,
                             int (*comparator)(const void *, const void *)) {
     // Base case: if the list is empty or has only one node,
-    // it's already sorted
+    // it's already sorted.
     if (head == NULL || head->next == NULL) {
         return head;
     }
 
-    // Split the list into two halves
-    forward_list_node *second = forward_list_node_mergesort_split(head);
+    // Split the list into two halves.
+    forward_list_node *mid = forward_list_node_mergesort_split(head);
 
-    // Recursively sort each half
-    head = forward_list_node_mergesort(head, comparator);
-    second = forward_list_node_mergesort(second, comparator);
+    // Recursively sort each half.
+    forward_list_node *left = forward_list_node_mergesort(head, comparator);
+    forward_list_node *right = forward_list_node_mergesort(mid, comparator);
 
-    // Merge the two sorted halves
-    return forward_list_node_mergesort_merge(head, second, comparator);
+    // Merge the two sorted halves.
+    return forward_list_node_mergesort_merge(left, right, comparator);
 }
 
 static forward_list_node *
 forward_list_node_mergesort_split(forward_list_node *head) {
-    forward_list_node *fast = head;
-    forward_list_node *slow = head;
-
-    // Move fast pointer two steps and slow pointer
-    // one step until fast reaches the end
-    while (fast != NULL && fast->next != NULL) {
-        fast = fast->next->next;
-        if (fast != NULL) {
-            slow = slow->next;
-        }
+    // If the list is empty or has only one node, it's already sorted.
+    if (head == NULL) {
+        return head;
     }
 
-    // Split the list into two halves
-    forward_list_node *temp = slow->next;
+    // Use slow and fast pointer technique to find the middle of the list.
+    forward_list_node *slow = head;
+    forward_list_node *fast = head;
+
+    while (fast->next != NULL && fast->next->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    // Split the list into two halves.
+    forward_list_node *mid = slow->next;
     slow->next = NULL;
 
-    return temp;
+    return mid;
 }
 
 static forward_list_node *forward_list_node_mergesort_merge(
@@ -91,10 +93,6 @@ static forward_list_node *forward_list_node_mergesort_merge(
         first->next =
             forward_list_node_mergesort_merge(first->next, second, comparator);
 
-        // For doubly-linked lists
-        // first->next->prev = first;
-        // first->prev = NULL;
-
         return first;
     }
 
@@ -103,9 +101,6 @@ static forward_list_node *forward_list_node_mergesort_merge(
     second->next =
         forward_list_node_mergesort_merge(first, second->next, comparator);
 
-    // For doubly-linked lists
-    // second->next->prev = second;
-    // second->prev = NULL;
     return second;
 }
 
@@ -114,20 +109,20 @@ static forward_list_node *
 forward_list_node_mergesort_b(forward_list_node *head,
                               int (^comparator)(const void *, const void *)) {
     // Base case: if the list is empty or has only one node,
-    // it's already sorted
+    // it's already sorted.
     if (head == NULL || head->next == NULL) {
         return head;
     }
 
-    // Split the list into two halves
-    forward_list_node *second = forward_list_node_mergesort_split(head);
+    // Split the list into two halves.
+    forward_list_node *mid = forward_list_node_mergesort_split(head);
 
-    // Recursively sort each half
-    head = forward_list_node_mergesort_b(head, comparator);
-    second = forward_list_node_mergesort_b(second, comparator);
+    // Recursively sort each half.
+    forward_list_node *left = forward_list_node_mergesort_b(head, comparator);
+    forward_list_node *right = forward_list_node_mergesort_b(mid, comparator);
 
-    // Merge the two sorted halves
-    return forward_list_node_mergesort_merge_b(head, second, comparator);
+    // Merge the two sorted halves.
+    return forward_list_node_mergesort_merge_b(left, right, comparator);
 }
 
 static forward_list_node *forward_list_node_mergesort_merge_b(
@@ -148,10 +143,6 @@ static forward_list_node *forward_list_node_mergesort_merge_b(
         first->next = forward_list_node_mergesort_merge_b(first->next, second,
                                                           comparator);
 
-        // For doubly-linked lists
-        // first->next->prev = first;
-        // first->prev = NULL;
-
         return first;
     }
 
@@ -160,9 +151,6 @@ static forward_list_node *forward_list_node_mergesort_merge_b(
     second->next =
         forward_list_node_mergesort_merge_b(first, second->next, comparator);
 
-    // For doubly-linked lists
-    // second->next->prev = second;
-    // second->prev = NULL;
     return second;
 }
 #endif
@@ -221,7 +209,8 @@ int forward_list_puts(const forward_list *const me) {
 
     const forward_list_node *iterator = forward_list_cbegin(me);
     while (iterator != forward_list_cend(me)) {
-        val += printf("%d%c", iterator->data, iterator->next == NULL ? 0 : ' ');
+        val += printf("%d%c", iterator->data,
+                      iterator->next == forward_list_cend(me) ? '\0' : ' ');
         iterator = iterator->next;
     }
 
