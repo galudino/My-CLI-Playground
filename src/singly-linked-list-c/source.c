@@ -8,42 +8,33 @@
 
 #include "header.h"
 
-static void node_init(node *const me, int data);
-static void node_deinit(node *const me);
-static node *node_insert_after(node *const me, node *new_node);
-static node *node_erase_after(node *pos);
+#include <stdio.h>
+#include <stdlib.h>
 
-static node *node_mergesort(node *head);
-static node *node_mergesort_split(node *head);
-static node *node_mergesort_merge(node *first, node *second);
+static forward_list_node *
+forward_list_node_mergesort(forward_list_node *head,
+                            int (*comparator)(const void *, const void *));
 
-static void node_init(node *const me, int data) {
-    // If applicable,
-    // constructors/initialization functions for `data`
-    // should be called here.
-    me->data = data;
-    me->next = NULL;
-}
+static forward_list_node *
+forward_list_node_mergesort_split(forward_list_node *head);
 
-static void node_deinit(node *const me) {
-    // If applicable,
-    // destructors/deinitialization functions for `data`
-    // should be called here.
-}
+static forward_list_node *forward_list_node_mergesort_merge(
+    forward_list_node *first, forward_list_node *second,
+    int (*comparator)(const void *, const void *));
 
-static node *node_insert_after(node *const me, node *new_node) {
-    new_node->next = me->next;
-    me->next = new_node;
-    return new_node;
-}
+#ifdef __APPLE__
+static forward_list_node *
+forward_list_node_mergesort_b(forward_list_node *head,
+                              int (^comparator)(const void *, const void *));
 
-static node *node_erase_after(node *pos) {
-    node *victim = pos->next;
-    pos->next = victim->next;
-    return victim;
-}
+static forward_list_node *forward_list_node_mergesort_merge_b(
+    forward_list_node *first, forward_list_node *second,
+    int (^comparator)(const void *, const void *));
+#endif
 
-static node *node_mergesort(node *head) {
+static forward_list_node *
+forward_list_node_mergesort(forward_list_node *head,
+                            int (*comparator)(const void *, const void *)) {
     // Base case: if the list is empty or has only one node,
     // it's already sorted
     if (head == NULL || head->next == NULL) {
@@ -51,19 +42,20 @@ static node *node_mergesort(node *head) {
     }
 
     // Split the list into two halves
-    node *second = node_mergesort_split(head);
+    forward_list_node *second = forward_list_node_mergesort_split(head);
 
     // Recursively sort each half
-    head = node_mergesort(head);
-    second = node_mergesort(second);
+    head = forward_list_node_mergesort(head, comparator);
+    second = forward_list_node_mergesort(second, comparator);
 
     // Merge the two sorted halves
-    return node_mergesort_merge(head, second);
+    return forward_list_node_mergesort_merge(head, second, comparator);
 }
 
-static node *node_mergesort_split(node *head) {
-    node *fast = head;
-    node *slow = head;
+static forward_list_node *
+forward_list_node_mergesort_split(forward_list_node *head) {
+    forward_list_node *fast = head;
+    forward_list_node *slow = head;
 
     // Move fast pointer two steps and slow pointer
     // one step until fast reaches the end
@@ -75,13 +67,15 @@ static node *node_mergesort_split(node *head) {
     }
 
     // Split the list into two halves
-    node *temp = slow->next;
+    forward_list_node *temp = slow->next;
     slow->next = NULL;
 
     return temp;
 }
 
-static node *node_mergesort_merge(node *first, node *second) {
+static forward_list_node *forward_list_node_mergesort_merge(
+    forward_list_node *first, forward_list_node *second,
+    int (*comparator)(const void *, const void *)) {
     // If either list is empty, return the other list
     if (first == NULL) {
         return second;
@@ -91,82 +85,109 @@ static node *node_mergesort_merge(node *first, node *second) {
         return first;
     }
 
-    // Pick the smaller value between first and second nodes
-    if (first->data < second->data) {
+    if (comparator(&first->data, &second->data) <= 0) {
         // Recursively merge the rest of the lists and
         // link the result to the current node
-        first->next = node_mergesort_merge(first->next, second);
+        first->next =
+            forward_list_node_mergesort_merge(first->next, second, comparator);
 
         // For doubly-linked lists
         // first->next->prev = first;
         // first->prev = NULL;
-        
+
         return first;
     }
 
     // Recursively merge the rest of the lists
     // and link the result to the current node
-    second->next = node_mergesort_merge(first, second->next);
-    
+    second->next =
+        forward_list_node_mergesort_merge(first, second->next, comparator);
+
     // For doubly-linked lists
     // second->next->prev = second;
     // second->prev = NULL;
     return second;
 }
 
-void forward_list_init(forward_list *const me) {
-    node_init(&me->impl, INT_MIN);
+#ifdef __APPLE__
+static forward_list_node *
+forward_list_node_mergesort_b(forward_list_node *head,
+                              int (^comparator)(const void *, const void *)) {
+    // Base case: if the list is empty or has only one node,
+    // it's already sorted
+    if (head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    // Split the list into two halves
+    forward_list_node *second = forward_list_node_mergesort_split(head);
+
+    // Recursively sort each half
+    head = forward_list_node_mergesort_b(head, comparator);
+    second = forward_list_node_mergesort_b(second, comparator);
+
+    // Merge the two sorted halves
+    return forward_list_node_mergesort_merge_b(head, second, comparator);
 }
 
-void forward_list_deinit(forward_list *const me) { forward_list_clear(me); }
+static forward_list_node *forward_list_node_mergesort_merge_b(
+    forward_list_node *first, forward_list_node *second,
+    int (^comparator)(const void *, const void *)) {
+    // If either list is empty, return the other list
+    if (first == NULL) {
+        return second;
+    }
 
-node *forward_list_before_begin(forward_list *const me) { return &me->impl; }
+    if (second == NULL) {
+        return first;
+    }
 
-const node *forward_list_cbefore_begin(const forward_list *const me) {
-    return &me->impl;
+    if (comparator(&first->data, &second->data) <= 0) {
+        // Recursively merge the rest of the lists and
+        // link the result to the current node
+        first->next = forward_list_node_mergesort_merge_b(first->next, second,
+                                                          comparator);
+
+        // For doubly-linked lists
+        // first->next->prev = first;
+        // first->prev = NULL;
+
+        return first;
+    }
+
+    // Recursively merge the rest of the lists
+    // and link the result to the current node
+    second->next =
+        forward_list_node_mergesort_merge_b(first, second->next, comparator);
+
+    // For doubly-linked lists
+    // second->next->prev = second;
+    // second->prev = NULL;
+    return second;
+}
+#endif
+
+forward_list_node *forward_list_insert_after(forward_list *const me,
+                                             forward_list_const_iterator pos,
+                                             int value) {
+    forward_list_node *new_node = malloc(sizeof *new_node);
+    forward_list_node_init(new_node, value);
+
+    return forward_list_node_insert_after((forward_list_node *)pos, new_node);
 }
 
-node *forward_list_begin(forward_list *const me) { return me->impl.next; }
-
-const node *forward_list_cbegin(const forward_list *const me) {
-    return me->impl.next;
-}
-
-node *forward_list_end(forward_list *const me) { return NULL; }
-
-const node *forward_list_cend(const forward_list *const me) { return NULL; }
-
-int *forward_list_front(forward_list *const me) {
-    return &forward_list_begin(me)->data;
-}
-
-node *forward_list_insert_after(forward_list *const me,
-                                forward_list_const_iterator pos, int value) {
-    node *new_node = malloc(sizeof *new_node);
-    node_init(new_node, value);
-
-    return node_insert_after((node *)pos, new_node);
-}
-
-node *forward_list_erase_after(forward_list *const me,
-                               forward_list_const_iterator pos) {
-    node *victim = node_erase_after((node *)pos);
-    node *next = victim->next;
-    node_deinit(victim);
+forward_list_node *forward_list_erase_after(forward_list *const me,
+                                            forward_list_const_iterator pos) {
+    forward_list_node *victim =
+        forward_list_node_erase_after((forward_list_node *)pos);
+    forward_list_node *next = victim->next;
+    forward_list_node_deinit(victim);
     free(victim);
     return next;
 }
 
-void forward_list_push_front(forward_list *const me, int value) {
-    forward_list_insert_after(me, forward_list_before_begin(me), value);
-}
-
-void forward_list_pop_front(forward_list *const me) {
-    forward_list_erase_after(me, forward_list_before_begin(me));
-}
-
 void forward_list_clear(forward_list *const me) {
-    node *pos = forward_list_before_begin(me);
+    forward_list_node *pos = forward_list_before_begin(me);
 
     while (pos->next != forward_list_end(me)) {
         forward_list_erase_after(me, pos);
@@ -174,8 +195,8 @@ void forward_list_clear(forward_list *const me) {
 }
 
 void forward_list_foreach(const forward_list *const me,
-                          void (*visit)(const node *)) {
-    const node *iterator = forward_list_cbegin(me);
+                          void (*visit)(const forward_list_node *)) {
+    const forward_list_node *iterator = forward_list_cbegin(me);
     while (iterator != forward_list_cend(me)) {
         visit(iterator);
         iterator = iterator->next;
@@ -184,8 +205,8 @@ void forward_list_foreach(const forward_list *const me,
 
 #ifdef __APPLE__
 void forward_list_foreach_b(const forward_list *const me,
-                            void (^visit)(const node *)) {
-    const node *iterator = forward_list_cbegin(me);
+                            void (^visit)(const forward_list_node *)) {
+    const forward_list_node *iterator = forward_list_cbegin(me);
     while (iterator != forward_list_cend(me)) {
         visit(iterator);
         iterator = iterator->next;
@@ -198,7 +219,7 @@ int forward_list_puts(const forward_list *const me) {
 
     val += printf("[");
 
-    const node *iterator = forward_list_cbegin(me);
+    const forward_list_node *iterator = forward_list_cbegin(me);
     while (iterator != forward_list_cend(me)) {
         val += printf("%d%c", iterator->data, iterator->next == NULL ? 0 : ' ');
         iterator = iterator->next;
@@ -209,7 +230,17 @@ int forward_list_puts(const forward_list *const me) {
     return val;
 }
 
-void forward_list_mergesort(forward_list *const me) {
-    me->impl.next =
-        node_mergesort((forward_list_iterator)forward_list_cbegin(me));
+void forward_list_mergesort(forward_list *const me,
+                            int (*comparator)(const void *, const void *)) {
+    me->impl.next = forward_list_node_mergesort(
+        (forward_list_iterator)forward_list_cbegin(me), comparator);
 }
+
+#ifdef __APPLE__
+void forward_list_mergesort_b(forward_list *const me,
+                              int (^comparator)(const void *, const void *)) {
+    me->impl.next = forward_list_node_mergesort_b(
+        (forward_list_iterator)forward_list_cbegin(me), comparator);
+}
+
+#endif

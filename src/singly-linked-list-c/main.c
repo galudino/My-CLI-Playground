@@ -8,6 +8,10 @@
 
 #include "header.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 void list_test();
 // void inline_node_test();
 
@@ -32,7 +36,7 @@ void list_test() {
     forward_list list;
     forward_list_init(&list);
 
-    node *iterator = forward_list_before_begin(&list);
+    forward_list_node *iterator = forward_list_before_begin(&list);
 
     for (int i = 1; i <= 10; i++) {
         iterator =
@@ -55,8 +59,15 @@ void list_test() {
     forward_list_puts(&list);
     puts("");
 
+#ifdef __APPLE__
     printf("Applying mergesort to list\n");
-    forward_list_mergesort(&list);
+    forward_list_mergesort_b(&list, ^(const void *lhs, const void *rhs) {
+      return *(int *)lhs - *(int *)rhs;
+    });
+#else
+    printf("Applying mergesort to list\n");
+    forward_list_mergesort(&list, int_compare);
+#endif
 
     forward_list_puts(&list);
     puts("");
@@ -66,6 +77,8 @@ void list_test() {
 
     forward_list_puts(&list);
     puts("");
+
+    printf("Is list empty? %s\n", forward_list_empty(&list) ? "yes" : "no");
 }
 
 int rand_range(int min, int max) { return rand() % (max + 1 - min) + min; }
