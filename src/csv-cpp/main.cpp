@@ -7,6 +7,9 @@
  */
 
 #include "header.hpp"
+#include <fstream>
+
+constexpr auto csv_filepath = "../../../../dat/csv/noble_gases.csv";
 
 /*!
     \brief      Program execution begins here.
@@ -17,7 +20,21 @@
     \return     0 on success, non-zero on failure
  */
 int main(int argc, const char *argv[]) {
-    std::cout << "Hello, world!" << std::endl;
+    auto infile = std::ifstream(csv_filepath);
+    
+    if (!infile) {
+        std::cerr << "Unable to open " << csv_filepath << std::endl;
+        return EXIT_FAILURE;
+    }
+   
+    auto bytes = std::vector<char>(std::istreambuf_iterator<char>(infile), std::istreambuf_iterator<char>());
+    
+    infile.close();
+    
+    for (const auto byte : bytes) {
+        std::cout << byte;
+    }
+    
     return EXIT_SUCCESS;
 }
 

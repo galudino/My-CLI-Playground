@@ -28,17 +28,17 @@ public:
     graph(graph &&g) = default;
     
     virtual ~graph() {}
-    
-    graph &operator=(const graph &g) = default;
-    graph &operator=(graph &&g) = default;
-    
-    int add_vertex();
-    bool remove_vertex(int vertex_id);
-    
-    bool add_edge(int origin_vertex_id, int destination_vertex_id);
-    bool remove_edge(int origin_vertex_id, int destination_vertex_id);
 
-    const adjacency_list &operator[](int vertex_id) const;
+    auto operator=(const graph &g) -> graph & = default;
+    auto operator=(graph &&g) -> graph & = default;
+    
+    auto add_vertex() -> int;
+    auto remove_vertex(int vertex_id) -> bool;
+    
+    auto add_edge(int origin_vertex_id, int destination_vertex_id) -> bool;
+    auto remove_edge(int origin_vertex_id, int destination_vertex_id) -> bool;
+    
+    auto operator[](int vertex_id) const -> const adjacency_list &;
     
     size_t size() const;
     bool empty() const;

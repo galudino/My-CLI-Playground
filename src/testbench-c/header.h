@@ -2,7 +2,7 @@
     \file       header.h
     \brief      Header file
 
-    \author     
+    \author
     \date
  */
 
@@ -10,6 +10,7 @@
 #define HEADER_H
 
 #include <stdio.h>
+
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -21,13 +22,12 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <netinet/in.h>
-#include <string.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <string.h>
 #include <strings.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 #endif /* HEADER_H */
-
