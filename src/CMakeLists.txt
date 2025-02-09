@@ -44,3 +44,4 @@ add_subdirectory(./threads-c)
 
 add_subdirectory(./csv-cpp)
 
+add_subdirectory(./singly-linked-list-c)

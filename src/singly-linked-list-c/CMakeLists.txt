@@ -1,0 +1,6 @@
+add_library(singly-linked-list-c-library source.c header.h)
+target_compile_options(singly-linked-list-c-library PUBLIC -fblocks)
+target_include_directories(singly-linked-list-c-library PUBLIC )
+add_executable(singly-linked-list-c main.c)
+target_compile_options(singly-linked-list-c PUBLIC -fblocks)
+target_link_libraries(singly-linked-list-c LINK_PUBLIC singly-linked-list-c-library)
